@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SOLID Design Principles</title>
+</head>
+<style>
+    pre{
+        background: #eee;
+    }
+
+    .highlight {
+        background: #ff00ff;
+    }
+</style>
+<body>
+    <h1>S. Single Responsiblity Principle</h1>
+    <h6><a href="https://www.youtube.com/watch?v=DAD2oMWDWNc">Dan Israel</a></h6>
+    <ul>
+        <li>Small Classes</li>
+        <li>Single Responsiblity Classes</li>
+        <li>Limit the Impact of Change</li>
+    </ul>
+
+    <blockquote>
+        Gather together the things that change for the same reason, separate those things that change for a different reason.
+        <br>
+        - Uncle Bob
+        <a href="https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html">Uncle Bob's Blog on Single Responsibility</a>
+    </blockquote>
+
+    <h2>Implementation</h2>
+    <pre>
+        // ie. Cash Register
+        
+        class CashRegister {
+            constructor(){
+                this.subTotal = 0;
+                this.taxRate = 7.5;
+                this.grandTotal = 0;
+            }
+
+            calculateTotal(){
+                this.grandTotal = this.subTotal + (this.subTotal * this.taxRate);
+                this.emailReceipt(`Thanks, your total was: ${this.grandTotal}`);
+            }
+
+            emailReceipt(message){
+
+            }
+        }
+    </pre>
+    
+    <p>Question: Should the cash register be concerned with emailing a receipt?</p>
+    <p>
+        Answer: No, there should be an email class that handles this that way if
+        the way customers are emailed change you would have to change every class that
+        has this email logic.  However if the email logic is decoupled into it's own class
+        we can handle all changes in 1 place.
+    </p>
+
+    <h6>New Implementation</h6>
+
+    <pre>
+        // Email Class
+        export class Email {
+            static sendMessage(message){
+                //
+            }
+        }
+    </pre>
+
+    <pre>
+        // CashRegister Class
+
+        import { Email } from './email.class';
+        
+        class CashRegister {
+            constructor(){
+                this.subTotal = 0;
+                this.taxRate = 7.5;
+                this.grandTotal = 0;
+            }
+
+            calculateTotal(){
+                this.grandTotal = this.subTotal + (this.subTotal * this.taxRate);
+                Email.emailReceipt(`Thanks, your total was: ${this.grandTotal}`);
+            }
+
+            emailReceipt(message){
+
+            }
+        }
+    </pre>
+
+    <p>Now if something in the Email class changes no changes need to be made to the CashRegister Class</p>
+    
+    <br><br>
+    <hr>
+    <br><br>
+
+    <h1>O. Software should be Open for Extension and Closed for Modification</h1>
+    <ul>
+        <li>Successful Use of Inheritance</li>
+        <li>Allow Changes to Occur Easily</li>
+        <li>A Well Written Class Should Not Have to be Re-Written in Order Integrate a New Feature</li>
+    </ul>
+
+    <br>
+        <blockquote>
+            If the behaviors of all the modules in your system could be extended, without modifying them, then you could add new features to that system without modifying any old code. The features would be added solely by writing new code.
+
+            What’s more, since none of the old code had changed, it would not need to be recompiled, and therefore it would not need to be redeployed. Adding a new feature would involve leaving the old code in place and only deploying the new code
+            <br><br>
+            - Uncle Bob
+            <a href="https://blog.cleancoder.com/uncle-bob/2014/05/12/TheOpenClosedPrinciple.html">Uncle Bob's Blog on Open/Closed</a>
+        </blockquote>
+       
+    <h2>Implementation</h2>
+    <pre>
+        // Order Report Application
+        // Original Class
+
+        class OrderReport{
+            constructor(customer, total){
+                this.customer = customer;
+                this.total = total;
+            }
+        
+            invoice(){
+                console.log(`Invoice \n ${this.customer} \n ${this.total}`);
+            }
+        
+            billOfLading(){
+                console.log(`BOL \n ${this.customer} \n Shipping Label`);
+            }
+        }
+        
+        // Adding new feature to print the customer address
+        // Bad example
+        // 4 Changes have been made to the class, one of the changes 
+        // is adding a new argument to the contructor.
+        
+        // This breaks the open/closed principle because it changes a class 
+        // in order to implement a new feature.
+        class OrderReport_NoOpenClosed{
+            constructor(customer, total, <span class="highlight">address</span>){
+                this.customer = customer;
+                this.total = total;
+                this.address = <span class="highlight">address;</span>
+            }
+        
+            invoice(){
+                console.log(`Invoice \n ${this.customer} \n ${this.total} \n <span class="highlight">${this.address}</span>`);
+            }
+        
+            billOfLading(){
+                console.log(`BOL \n ${this.customer} \n Shipping Label \n <span class="highlight">${this.address}</span>`);
+            }
+        }
+        
+        // New implementation using the Open/Closed Principle
+        // We abstract out an Invoice class that extends OrderReport
+        // We then abstract out BillOfLadding by extending OrderReport as well
+        
+        class New_OrderReport {
+            constructor(customer, total){
+                this.customer = customer;
+                this.total = total;
+            }
+        }
+        
+        class Invoice extends New_OrderReport{
+            constructor(customer, total){
+                super(customer, total);
+            }
+        
+            printOut(){
+                console.log(`Invoice \n ${this.customer} \n ${this.total}`);
+            }
+        }
+        
+        class BillOfLadding extends OrderReport{
+            constructor(customer, total, address){
+                super(customer, total);
+                this.address = address;
+            }
+        
+            printOut(){
+                console.log(`BOL \n ${this.customer} \n ${this.total} \n ${this.address}`);
+            }
+        }
+    </pre>
+    
+    <script src="open_closed.js"></script>
+</body>
+</html>
