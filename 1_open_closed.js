@@ -59,7 +59,7 @@ class Invoice extends New_OrderReport{
     }
 }
 
-class BillOfLadding extends OrderReport{
+class BillOfLadding extends New_OrderReport{
     constructor(customer, total, address){
         super(customer, total);
         this.address = address;

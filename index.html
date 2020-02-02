@@ -35,7 +35,7 @@
     <pre>
         // ie. Cash Register
         
-        class CashRegister {
+        class CashRegister1 {
             constructor(){
                 this.subTotal = 0;
                 this.taxRate = 7.5;
@@ -48,7 +48,7 @@
             }
 
             emailReceipt(message){
-
+                console.log(`Sending Email: ${message}`);
             }
         }
     </pre>
@@ -67,7 +67,7 @@
         // Email Class
         export class Email {
             static sendMessage(message){
-                //
+                console.log(`Sending Email: ${message}`);
             }
         }
     </pre>
@@ -77,7 +77,7 @@
 
         import { Email } from './email.class';
         
-        class CashRegister {
+        class CashRegister2 {
             constructor(){
                 this.subTotal = 0;
                 this.taxRate = 7.5;
@@ -86,13 +86,8 @@
 
             calculateTotal(){
                 this.grandTotal = this.subTotal + (this.subTotal * this.taxRate);
-                Email.emailReceipt(`Thanks, your total was: ${this.grandTotal}`);
+                <span class="highlight">Email.sendMessage(`Thanks, your total was: ${this.grandTotal}`);</span>
             }
-
-            emailReceipt(message){
-
-            }
-        }
     </pre>
 
     <p>Now if something in the Email class changes no changes need to be made to the CashRegister Class</p>
@@ -145,6 +140,7 @@
         
         // This breaks the open/closed principle because it changes a class 
         // in order to implement a new feature.
+
         class OrderReport_NoOpenClosed{
             constructor(customer, total, <span class="highlight">address</span>){
                 this.customer = customer;
@@ -182,7 +178,7 @@
             }
         }
         
-        class BillOfLadding extends OrderReport{
+        class BillOfLadding extends New_OrderReport{
             constructor(customer, total, address){
                 super(customer, total);
                 this.address = address;
