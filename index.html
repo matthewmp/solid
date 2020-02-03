@@ -189,7 +189,77 @@
             }
         }
     </pre>
-    
+
+    <hr>
+    <h1>L. Liskov's Substitution Principle</h1>
+    <UL>
+        <li>
+            Let q(x) be a property provable about objects of x of type T. Then q(y) should be provable for objects y of type S where S is a subtype of T.
+        </li>
+        <li>Subtypes should retain the behaviors of the main type</li>
+        <li>Children should be like their parents for what they inherit</li>
+        <li><strong>A subclass should be able to be swapped with a parent class and not create any issues</strong></li>
+    </UL>
+
+    <h2>Implementation</h2>
+
+    <pre>
+        // A Rectangle Class has a method to set it's width and another to set it's height. 
+        // It also has methods to increase it's width and return it's area
+
+        class Rectangle {
+            setWidth(width){
+                this.width = width;
+            }
+
+            setHeight(height){
+                this.height = height;
+            }
+
+            increaseWidth(){
+                this.setWidth(this.width + 1);
+                this.area();
+            }
+
+            area(){
+                console.log('Area: ', this.width * this.height);
+            }
+        }
+
+        // Now we extend the Rectangle class with a Square class.
+        // The only difference is that we set the width and height to be the same.
+
+        class Square extends Rectangle {
+            setWidth(width){
+                this.width = width;
+                this.height = width;
+            }
+
+            setHeight(height){
+                this.width = height;
+                this.height = height;
+            }
+        }
+
+        // Instantiate a new square and set it's width to 5.
+        var square = new Square();
+        square.setWidth(5); // width: 5, height: 5
+
+        square.area() //25
+
+        square.increaseWidth() // height: 6, width: 6, area: 36
+
+        /*
+            Because the Square increases both width and height together,
+            a square can not replace a rectangle and breaks Liskov's principle of
+            substitution.
+
+            https://www.youtube.com/watch?v=dJQMqNOC4Pc
+            Min: 4
+        */
+    </pre>
+
+
     <script src="open_closed.js"></script>
 </body>
 </html>
