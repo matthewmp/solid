@@ -251,11 +251,50 @@
 
         /*
             Because the Square increases both width and height together,
-            a square can not replace a rectangle and breaks Liskov's principle of
+            a rectangle can not replace a square and breaks Liskov's principle of
             substitution.
 
-            https://www.youtube.com/watch?v=dJQMqNOC4Pc
-            Min: 4
+            In order to fix this we can change where the square inherits from.
+        */
+
+        // Create Shape Class as Parent to Rectangle and Square
+        class Shape {
+            area(){
+                console.log('Area: ', this.width * this.height);
+            }
+        }
+        
+        class Rectangle extends Shape{
+            setWidth(width){
+                this.width = width;
+            }
+        
+            setHeight(height){
+                this.height = height;
+            }
+        
+            increaseWidth(){
+                this.setWidth(this.width + 1);
+                this.area();
+            }
+        } 
+        
+        class Square extends Shape {
+            setWidth(width){
+                this.width = width;
+                this.height = width;
+            }
+        
+            setHeight(height){
+                this.width = height;
+                this.height = height;
+            }
+        }
+
+        /*
+            Now both Reactangle and Square inherit from Shape so they both will have 
+            the area() method baked in and can explicitly handle their individual
+            needs in terms of setting width/height within their own classes.
         */
     </pre>
 
