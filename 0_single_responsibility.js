@@ -18,15 +18,13 @@ class CashRegister1 {
 }
 
    // Email Class
-export class Email {
+class Email {
     static sendMessage(message){
         console.log(`Sending Email: ${message}`);
     }
 }
 
 // CashRegister Class
-
-// import { Email } from './email.class';  (import if necessary)
         
 class CashRegister2 {
     constructor(){
